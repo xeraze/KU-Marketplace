@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KU Marketplace | Kherson, Ukraine</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body { 
+            background-color: #0b0b0b; 
+            color: #eee; 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden; 
+        }
+
+        .glass { 
+            background: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(10px); 
+        }
+
+        #order-modal { 
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,0.85); 
+            z-index: 100; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(6px);
+        }
+
+        .modal-content { 
+            background: #121212; 
+            border: 1px solid #222; 
+            width: 90%; 
+            max-width: 400px; 
+            padding: 2rem; 
+            border-radius: 1.5rem; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        input { 
+            background: #1a1a1a !important; 
+            border: 1px solid #333 !important; 
+            color: white !important; 
+            transition: all 0.2s;
+        }
+
+        input:focus { 
+            border-color: #e30613 !important; 
+            box-shadow: 0 0 0 2px rgba(227, 6, 19, 0.2);
+            outline: none; 
+        }
+
+        .btn-discord { background-color: #5865F2; }
+        .btn-discord:hover { background-color: #4752c4; }
+        
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="order-modal">
+        <div class="modal-content">
+            <h3 class="text-xl font-black mb-1 italic">ОФОРМЛЕННЯ</h3>
+            <p id="modal-item-name" class="text-red-600 text-[10px] font-black uppercase tracking-widest mb-6"></p>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[10px] uppercase font-black text-gray-500 ml-1">Roblox Nickname</label>
+                    <input type="text" id="roblox-nick" placeholder="Твій нік у грі" class="w-full px-4 py-3 rounded-xl mt-1 text-sm">
+                </div>
+                <div>
+                    <label class="text-[10px] uppercase font-black text-gray-500 ml-1">Контактний Discord</label>
+                    <input type="text" id="discord-tag" placeholder="Напр: xeraze_off" class="w-full px-4 py-3 rounded-xl mt-1 text-sm">
+                </div>
+                
+                <div class="pt-4 flex gap-3">
+                    <button onclick="closeModal()" class="flex-1 py-3 text-xs font-bold text-gray-500 hover:text-white transition-colors">СКАСУВАТИ</button>
+                    <button onclick="confirmPurchase()" class="flex-[2] bg-white text-black py-3 rounded-xl font-black text-xs hover:bg-red-600 hover:text-white transition-all shadow-lg">
+                        ПІДТВЕРДИТИ ТА ОПЛАТИТИ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="border-b border-white/5 p-4 glass sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-black italic tracking-tighter">KU <span class="text-red-600">MARKET</span></h1>
+            
+            <div id="auth-section">
+                <button id="login-btn" class="btn-discord px-4 py-2 rounded-lg font-bold text-sm transition-all flex items-center gap-2">
+                    <i class="fab fa-discord"></i> Увійти через Discord
+                </button>
+                
+                <div id="user-profile" class="hidden flex items-center gap-3">
+                    <div class="text-right">
+                        <p id="user-name" class="text-sm font-bold leading-none"></p>
+                        <p id="user-id" class="text-[10px] text-gray-500"></p>
+                    </div>
+                    <img id="user-avatar" src="" class="w-10 h-10 rounded-full border border-white/20">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 mt-10">
+        <div class="mb-12">
+            <h2 class="text-2xl font-black mb-2 uppercase italic">Ігрова валюта</h2>
+            <div class="h-1 w-20 bg-red-600"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass p-8 rounded-[2rem] border-b-4 border-transparent hover:border-red-600 transition-all group relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <i class="fas fa-coins text-9xl text-white"></i>
+                </div>
+                
+                <div class="h-32 mb-6 bg-red-600/5 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-money-bill-trend-up text-5xl text-red-600"></i>
+                </div>
+                
+                <h3 class="font-black text-xl mb-2">500,000 ГРИВЕНЬ</h3>
+                <p class="text-gray-500 text-xs mb-8 leading-relaxed">Швидке нарахування на ваш ігровий баланс. Після оплати кошти прийдуть протягом наступних 24 годин.</p>
+                
+                <div class="flex justify-between items-end">
+                    <div>
+                        <p class="text-[10px] font-black text-gray-600 uppercase">Ціна за пакет</p>
+                        <span class="text-2xl font-black italic">500 <span class="text-red-600 text-sm">UAH</span></span>
+                    </div>
+                    <button onclick="openModal('500,000 Гривень')" class="bg-white text-black px-6 py-3 rounded-xl font-black text-xs hover:bg-red-600 hover:text-white transition-all transform active:scale-95 shadow-xl">
+                        КУПИТИ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- CONFIGURATION ---
+        const CLIENT_ID = '1480477607186399262';
+        const WEBHOOK_URL = 'https://discord.com/api/webhooks/1480477258102603857/MMf4uCG2JcK2L7p5KAh1XkJ34b-kh-BqWHzaxygJhEhCAmBJ6vOt07ICL1sNrWj6TQRe';
+        const REDIRECT_URI = window.location.href.split('#')[0].split('?')[0]; 
+
+        let currentItem = '';
+
+        document.getElementById('login-btn').onclick = () => {
+            const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
+            window.location.href = url;
+        };
+
+        window.onload = async () => {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const accessToken = fragment.get('access_token');
+
+            if (accessToken) {
+                try {
+                    const response = await fetch('https://discord.com/api/users/@me', {
+                        headers: { Authorization: `Bearer ${accessToken}` }
+                    });
+                    const user = await response.json();
+
+                    displayUser(user);
+                    localStorage.setItem('ku_user', JSON.stringify(user));
+                    
+                    window.history.replaceState({}, document.title, REDIRECT_URI);
+                    
+                    sendNotification('📥 Вхід', `Користувач **${user.username}** зайшов на сайт.`);
+                } catch (e) { console.error(e); }
+            } else {
+                const savedUser = localStorage.getItem('ku_user');
+                if (savedUser) displayUser(JSON.parse(savedUser));
+            }
+        };
+
+        function displayUser(user) {
+            document.getElementById('login-btn').classList.add('hidden');
+            document.getElementById('user-profile').classList.remove('hidden');
+            document.getElementById('user-name').innerText = user.username;
+            document.getElementById('user-id').innerText = `ID: ${user.id}`;
+            document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+        }
+
+        // 2. ЛОГИКА ПОКУПКИ
+        function openModal(itemName) {
+            if (!localStorage.getItem('ku_user')) {
+                alert('Спочатку увійдіть через Discord!');
+                return;
+            }
+            currentItem = itemName;
+            document.getElementById('modal-item-name').innerText = itemName;
+            document.getElementById('order-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('order-modal').style.display = 'none';
+        }
+
+        async function confirmPurchase() {
+            const robloxNick = document.getElementById('roblox-nick').value.trim();
+            const discordTag = document.getElementById('discord-tag').value.trim();
+            const user = JSON.parse(localStorage.getItem('ku_user'));
+
+            if (!robloxNick || !discordTag) {
+                alert('Будь ласка, заповніть всі поля!');
+                return;
+            }
+
+            const logData = {
+                embeds: [{
+                    title: "💰 НОВЕ ЗАМОВЛЕННЯ",
+                    color: 16711680,
+                    fields: [
+                        { name: "Товар", value: currentItem, inline: true },
+                        { name: "Roblox", value: `\`${robloxNick}\``, inline: true },
+                        { name: "Контакт", value: `\`${discordTag}\``, inline: true },
+                        { name: "Аккаунт", value: `<@${user.id}> (${user.username})`, inline: false }
+                    ],
+                    timestamp: new Date()
+                }]
+            };
+
+            const ok = await sendNotification(null, null, logData);
+            if (ok) {
+                window.open('https://send.monobank.ua/ваша_банка', '_blank');
+                closeModal();
+            }
+        }
+
+        async function sendNotification(title, desc, customPayload = null) {
+            if (!WEBHOOK_URL || WEBHOOK_URL === 'ТВОЙ_ВЕБХУК') return false;
+            
+            const body = customPayload || {
+                embeds: [{ title: title, description: desc, color: 5814783 }]
+            };
+
+            try {
+                const res = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                return res.ok;
+            } catch (e) { return false; }
+        }
+    </script>
+</body>
+</html>
